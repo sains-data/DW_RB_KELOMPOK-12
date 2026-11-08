@@ -1,0 +1,1182 @@
+{
+ "sumber": "WebAPI BPS",
+ "domain": "0000",
+ "diunduh": "2026-10-17T17:44:26+07:00",
+ "skrip": "scrapping-bps-data.py",
+ "tabel": {
+  "sdg4_completion": {
+   "jenis": "dinamis",
+   "var": 1980,
+   "judul": "Tingkat Penyelesaian Pendidikan Menurut Jenjang Pendidikan dan Provinsi",
+   "satuan": "",
+   "last_update": [
+    "2026-08-26 08:29:01"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 945,
+   "sha256_json": "e0b1421956b6673054b20aa8b5ecab4dce37ae2b73a7b1b9b0eb6d040652132f"
+  },
+  "sdg4_aps": {
+   "jenis": "dinamis",
+   "var": 2211,
+   "judul": "Angka Partisipasi Sekolah (APS) Menurut Provinsi dan Kelompok Umur",
+   "satuan": "",
+   "last_update": [
+    "2026-08-28 03:20:36"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 1572,
+   "sha256_json": "06c48066f084752f88c482b94decbbacaf6991ea8507b699f351d9653756c5af"
+  },
+  "sdg4_apm": {
+   "jenis": "dinamis",
+   "var": 304,
+   "judul": "Angka Partisipasi Murni (APM) Menurut Provinsi dan Jenjang Pendidikan",
+   "satuan": "",
+   "last_update": [
+    "2025-12-12 13:58:59"
+   ],
+   "tahun": [
+    "2003",
+    "2004",
+    "2005",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 2376,
+   "sha256_json": "ac1d12474a59846c4e487beef7d1011f916b2dd26a02a0ccf4b11b6e8ed7883d"
+  },
+  "sdg4_apk": {
+   "jenis": "dinamis",
+   "var": 303,
+   "judul": "Angka Partisipasi Kasar (APK) Menurut Provinsi dan Jenjang Pendidikan",
+   "satuan": "",
+   "last_update": [
+    "2025-12-01 14:07:15"
+   ],
+   "tahun": [
+    "2003",
+    "2004",
+    "2005",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 2376,
+   "sha256_json": "15b9d56e3e2b30cd190900fe758e7a97548e030cf425d618afd37bbc64d726a8"
+  },
+  "sdg4_apk_pt": {
+   "jenis": "dinamis",
+   "var": 1443,
+   "judul": "Angka Partisipasi Kasar (APK) Perguruan Tinggi (PT) Menurut Provinsi",
+   "satuan": "",
+   "last_update": [
+    "2025-12-12 14:05:53"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "3b8245e001bc3614dbddb323e92588c0fcef41e3c7b39838419d817548347c2a"
+  },
+  "sdg4_hls": {
+   "jenis": "dinamis",
+   "var": 417,
+   "judul": "[Metode Baru] Harapan Lama Sekolah",
+   "satuan": "Tahun",
+   "last_update": [
+    "2025-11-05 11:56:10"
+   ],
+   "tahun": [
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 8732,
+   "sha256_json": "6e14806cf21835715abbc50745253bfbed82e88ba5fc41f202a2a8150103c47e"
+  },
+  "sdg4_rls": {
+   "jenis": "dinamis",
+   "var": 1429,
+   "judul": "Rata-Rata Lama Sekolah Penduduk Umur 15 Tahun ke Atas Menurut Provinsi",
+   "satuan": "",
+   "last_update": [
+    "2025-12-12 14:04:14"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "bc081b82fe1fa9326027434b5e883f1ef14d4c30efab6a34b87e379b2f642689"
+  },
+  "sdg4_amh": {
+   "jenis": "dinamis",
+   "var": 1458,
+   "judul": "Angka Melek Aksara Penduduk 15 Tahun ke Atas Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2025-12-01 14:26:02"
+   ],
+   "tahun": [
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 427,
+   "sha256_json": "6a81eaf2622acf1a3ac1c188a34716d0d5490e2851383b96cca8ee4f2a490102"
+  },
+  "sdg4_apk_paud": {
+   "jenis": "dinamis",
+   "var": 1439,
+   "judul": "Angka Partisipasi Kasar (APK) Anak Yang Mengikuti Pendidikan Anak Usia Dini (PAUD) Menurut Provinsi",
+   "satuan": "",
+   "last_update": [
+    "2025-12-01 14:08:21"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "fbe8cf28d6155e4a441897df1a03ecc3ef5f16768b88af01127d83434a07024b"
+  },
+  "sdg6_air_layak": {
+   "jenis": "dinamis",
+   "var": 845,
+   "judul": "Persentase Rumah Tangga yang Memiliki Akses terhadap Sumber Air Minum Layak Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2025-12-16 10:31:12"
+   ],
+   "tahun": [
+    "1993",
+    "1994",
+    "1995",
+    "1996",
+    "1997",
+    "1998",
+    "1999",
+    "2000",
+    "2001",
+    "2002",
+    "2003",
+    "2004",
+    "2005",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 722,
+   "sha256_json": "cb7de6c8b792f5f854ff9b2c65d8e226111a9b60b55ff24bfbb033cc8d545836"
+  },
+  "sdg6_sanitasi_layak": {
+   "jenis": "dinamis",
+   "var": 847,
+   "judul": "Persentase Rumah Tangga menurut Provinsi dan Memiliki Akses terhadap Sanitasi Layak",
+   "satuan": "Persen",
+   "last_update": [
+    "2025-12-16 14:31:07"
+   ],
+   "tahun": [
+    "1993",
+    "1994",
+    "1995",
+    "1996",
+    "1997",
+    "1998",
+    "1999",
+    "2000",
+    "2001",
+    "2002",
+    "2003",
+    "2004",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 1036,
+   "sha256_json": "a42896e397c10d04d7c2f025a9ab572ddc6e6adbc35c84aafc067d43796632f4"
+  },
+  "sdg6_sanitasi_aman": {
+   "jenis": "dinamis",
+   "var": 2179,
+   "judul": "Persentase Rumah Tangga Menggunakan Layanan Sanitasi yang Dikelola Secara Aman Menurut Provinsi dan Tipe Daerah",
+   "satuan": "Persen",
+   "last_update": [
+    "2025-12-15 15:07:24"
+   ],
+   "tahun": [
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 648,
+   "sha256_json": "91e7af0308c7368883c65a217390a0fea456913a0f74488dba2d5a6e068e8402"
+  },
+  "sdg6_cuci_tangan": {
+   "jenis": "dinamis",
+   "var": 1273,
+   "judul": "6.2.1* Persentase Rumah Tangga yang Memiliki Fasilitas Cuci Tangan dengan Sabun dan Air Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-07-06 15:13:09"
+   ],
+   "tahun": [
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 358,
+   "sha256_json": "d67d8f74e290108b3ccca8ddc077b051c8d5c5c7835bb1202c42c246e03cd5d4"
+  },
+  "sdg7_listrik_pln": {
+   "jenis": "dinamis",
+   "var": 87,
+   "judul": "Persentase Rumah Tangga menurut Provinsi dan Sumber Penerangan Utama dari Listrik PLN",
+   "satuan": "Persen",
+   "last_update": [
+    "2025-12-16 14:30:28"
+   ],
+   "tahun": [
+    "1993",
+    "1994",
+    "1995",
+    "1996",
+    "1997",
+    "1998",
+    "1999",
+    "2000",
+    "2001",
+    "2002",
+    "2003",
+    "2004",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 1036,
+   "sha256_json": "88d2ddbd3ccfeb6cb395345f034be0e39b8e732996a2824ae414d90a6153828e"
+  },
+  "sdg8_tpt": {
+   "jenis": "dinamis",
+   "var": 543,
+   "judul": "Tingkat Pengangguran Terbuka Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-05-06 15:41:30"
+   ],
+   "tahun": [
+    "1986",
+    "1987",
+    "1988",
+    "1989",
+    "1990",
+    "1991",
+    "1992",
+    "1993",
+    "1994",
+    "1996",
+    "1997",
+    "1998",
+    "1999",
+    "2000",
+    "2001",
+    "2002",
+    "2003",
+    "2004",
+    "2005",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025",
+    "2026"
+   ],
+   "periode": [
+    "Agustus",
+    "Februari",
+    "Tahunan"
+   ],
+   "baris": 2000,
+   "sha256_json": "fa50f5223f54f49183805551e2078d51e4002a8199bc16398ee58f4b29776654"
+  },
+  "sdg8_informal": {
+   "jenis": "dinamis",
+   "var": 2153,
+   "judul": "Proporsi Lapangan Kerja Informal Menurut Provinsi",
+   "satuan": "",
+   "last_update": [
+    "2026-07-07 15:13:52"
+   ],
+   "tahun": [
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 288,
+   "sha256_json": "2885bba78ad1680f6b69b016af6a7f572b7052ece051b378367f79be59000538"
+  },
+  "sdg8_upah": {
+   "jenis": "dinamis",
+   "var": 1172,
+   "judul": "Upah Rata - Rata Per Jam Pekerja Menurut Provinsi",
+   "satuan": "Rupiah/Jam",
+   "last_update": [
+    "2025-12-02 09:19:39"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "e5c31b36f2856989022c3e3865d88de07454b0bf7f4192891b56b1111934f8ec"
+  },
+  "sdg8_neet": {
+   "jenis": "dinamis",
+   "var": 1186,
+   "judul": "Persentase Usia Muda (15-24 Tahun) Yang Sedang Tidak Sekolah, Bekerja Atau Mengikuti Pelatihan",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-02-24 13:59:30"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "6af01a80b8cbdeb54b76f056632708724ffd93cdb1c307513101d851fe63a97f"
+  },
+  "sdg15_tutupan_kawasan": {
+   "jenis": "dinamis",
+   "var": 1304,
+   "judul": "Luas Penutupan Lahan Indonesa di Dalam dan di Luar Kawasan Hutan Menurut Provinsi",
+   "satuan": "Ribu Hektar",
+   "last_update": [
+    "2026-08-28 08:53:14"
+   ],
+   "tahun": [
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2023"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 627,
+   "sha256_json": "b9b586cc1472a9be4344352cde702f6894188a1881d21d9d78b2d525daf30ada"
+  },
+  "sdg15_lahan_kritis": {
+   "jenis": "dinamis",
+   "var": 588,
+   "judul": "Luas dan Penyebaran Lahan Kritis Menurut Provinsi",
+   "satuan": "Hektar",
+   "last_update": [
+    "2020-07-10 00:00:00"
+   ],
+   "tahun": [
+    "2006",
+    "2011",
+    "2013",
+    "2018"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 399,
+   "sha256_json": "531e280713fc414a25dcd20e5ae00ba95056e7b4bc83d4c9c87bea2441414090"
+  },
+  "sdg15_iklh": {
+   "jenis": "dinamis",
+   "var": 2532,
+   "judul": "Komponen Penyusun Indeks Kualitas Lingkungan Hidup Menurut Provinsi",
+   "satuan": "",
+   "last_update": [
+    "2026-08-28 09:34:47"
+   ],
+   "tahun": [
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 1179,
+   "sha256_json": "0caaa3885b61b989d8d054a87a340fe01ec06482588eebd99b43ae64229fd8fa"
+  },
+  "sdg4_amh_rinci": {
+   "jenis": "statis",
+   "table_id": 1609,
+   "judul": "Angka Melek Aksara Penduduk Umur 15 Tahun ke Atas Menurut Provinsi, Klasifikasi Desa, dan Jenis Kelamin, 2009-2025",
+   "last_update": [
+    "2025-12-16 08:57:49.103415"
+   ],
+   "tahun": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "baris_ditandai_cek": 0,
+   "baris": 5967,
+   "sha256_json": "90eedd9a42664ebb4f4d86ca50c8588d32dd7a3e93f1a22db29a7447d74d4cc7"
+  },
+  "sdg7_bahan_bakar": {
+   "jenis": "statis",
+   "table_id": 1364,
+   "judul": "Persentase Rumah Tangga Menurut Provinsi dan Bahan Bakar Utama untuk Memasak Tahun 2001, 2007-2021",
+   "last_update": [
+    "2022-10-04 10:34:23"
+   ],
+   "tahun": [
+    2001,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ],
+   "baris_ditandai_cek": 0,
+   "baris": 3920,
+   "sha256_json": "f409057fc1d66ee527cb9675149c1925390094162cdf997d387ad1dab1ecf8ac"
+  },
+  "sdg15_tutupan_hutan": {
+   "jenis": "statis",
+   "table_id": 2110,
+   "judul": "Rekapitulasi Luas Penutupan Lahan Hutan dan Non Hutan Menurut Provinsi Tahun 2014-2023 (Ribu Ha)",
+   "last_update": [
+    "2025-02-17 15:25:46.719196"
+   ],
+   "tahun": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ],
+   "baris_ditandai_cek": 130,
+   "baris": 1770,
+   "sha256_json": "b0730aae437965729da7d468b5d54282e7a3f6df4d078e68947948ecb259c28f"
+  },
+  "sdg8_produktivitas": {
+   "jenis": "dinamis",
+   "var": 1161,
+   "judul": "Laju Pertumbuhan PDB Per Tenaga Kerja/Tingkat Pertumbuhan PDB Riil Per Orang Bekerja Per Tahun",
+   "satuan": "",
+   "last_update": [
+    "2026-07-06 15:43:29"
+   ],
+   "tahun": [
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 524,
+   "sha256_json": "5291422b0cf01e2e73ce65b25e348a3ac56bc17ab57e508af6b97e9b22b79074",
+   "kunci_tak_dikenal": {
+    "1116101150": 4.62,
+    "1116101160": 1.83
+   },
+   "diunduh": "2026-10-17T12:35:19+07:00"
+  },
+  "sdg4_4_4_1_b_v1447": {
+   "jenis": "dinamis",
+   "var": 1447,
+   "judul": "4.4.1.(b) Proporsi Remaja Dan Dewasa Usia 15-59 Tahun Dengan Keterampilan Teknologi Informasi Dan Komputer (TIK) Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-05-26 02:12:19"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "ef1cc76ad2b3cfdcfb262b3522c36dde363de4aa30eb806539682d56246f6b44",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg4_4_4_1_a_v1451": {
+   "jenis": "dinamis",
+   "var": 1451,
+   "judul": "4.4.1.(a) Proporsi Remaja Dan Dewasa Usia 15-24 Tahun Dengan Keterampilan Teknologi Informasi Dan Komputer (TIK) Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-05-26 02:33:23"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "30875615b1ea72a6037ab7fd6ff15f2c94d0ccc045c16bad45e4e0f747696cf6",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg4_4_5_1_v2595": {
+   "jenis": "dinamis",
+   "var": 2595,
+   "judul": "4.5.1* Rasio Angka Partisipasi Kasar (APK) pada jenjang SMA/sederajat untuk kuintil terendah/kuintil tertinggi menurut provinsi",
+   "satuan": "",
+   "last_update": [
+    "2026-06-19 16:08:00"
+   ],
+   "tahun": [
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 218,
+   "sha256_json": "ce205cbf83a8c34c941c1c96d35911a201d70f095f03c956308e0e3de4948dc8",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg4_4_5_1_v2600": {
+   "jenis": "dinamis",
+   "var": 2600,
+   "judul": "4.5.1* Rasio Angka Partisipasi Kasar (APK) pada jenjang PT/sederajat untuk perempuan/laki-laki menurut provinsi",
+   "satuan": "",
+   "last_update": [
+    "2026-06-19 16:10:32"
+   ],
+   "tahun": [
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 218,
+   "sha256_json": "684f1d2cc37f2ae7cbb57da4690ffa4173f3ed38e8f81dd53d7c332af301da3f",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg4_4_3_1_v2685": {
+   "jenis": "dinamis",
+   "var": 2685,
+   "judul": "4.3.1* Tingkat Partisipasi Remaja dan Dewasa dalam Pendidikan dan Pelatihan Formal dan Non Formal dalam 12 Bulan Terakhir Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-05-21 14:01:40"
+   ],
+   "tahun": [
+    "2022",
+    "2023",
+    "2024"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 436,
+   "sha256_json": "2bd4a4dc8b92d7b9e10dd187596ee1345218a155a76d2ed51dec09af507cc33f",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg5_5_b_1_v1221": {
+   "jenis": "dinamis",
+   "var": 1221,
+   "judul": "5.b.1* Proporsi Individu yang Menguasai/Memiliki Telepon Genggam Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-07-06 14:55:49"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "d8597519b86a12d5955b0339db523e03ad125c89e7b393b05060bb691df84e34",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg6_6_1_1_v2741": {
+   "jenis": "dinamis",
+   "var": 2741,
+   "judul": "6.1.1* Persentase rumah tangga yang menggunakan layanan air minum yang dikelola secara aman menurut provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-06-04 12:45:09"
+   ],
+   "tahun": [
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 218,
+   "sha256_json": "54157cd9f8bebd2f2fa31ebcd826dbb710192a94e742200c3f0c338a673232be",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg6_6_2_1_v2749": {
+   "jenis": "dinamis",
+   "var": 2749,
+   "judul": "6.2.1* Persentase rumah tangga yang memiliki akses terhadap sanitasi aman menurut provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-06-17 15:37:14"
+   ],
+   "tahun": [
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 76,
+   "sha256_json": "d2ef30ad463fb5052920d4282ca1d48c833174cf145f9e20cdf6e7d372ded2b6",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg8_8_7_1_v2658": {
+   "jenis": "dinamis",
+   "var": 2658,
+   "judul": "8.7.1* Persentase dan Jumlah Pekerja Anak Usia 5-17 tahun Sesuai dengan Metadata SDGs Global Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-06-17 15:48:06"
+   ],
+   "tahun": [
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 212,
+   "sha256_json": "41b13e4b1df67909c8d41e1527a585fa576ff107c1e5d7f87d8b109203e5e5ac",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg9_9_1_2_v2753": {
+   "jenis": "dinamis",
+   "var": 2753,
+   "judul": "9.1.2* Jumlah Bongkar Muat Barang Moda Transportasi Kapal",
+   "satuan": "KG",
+   "last_update": [
+    "2026-06-03 14:03:07"
+   ],
+   "tahun": [
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 370,
+   "sha256_json": "e043c82edb22270cb8b802fca7cab80f3a0d62f6d32307020b6fd724f20258e5",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg9_9_1_2_v2754": {
+   "jenis": "dinamis",
+   "var": 2754,
+   "judul": "9.1.2*. Jumlah Bongkar Muat Barang Moda Transportasi Pesawat Terbang",
+   "satuan": "KG",
+   "last_update": [
+    "2026-06-03 14:04:11"
+   ],
+   "tahun": [
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 390,
+   "sha256_json": "8701670cc93f2694bdf983ab34a05ad32c81379077f2430c32ce0eb58a1e9764",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg9_9_2_2_v2755": {
+   "jenis": "dinamis",
+   "var": 2755,
+   "judul": "9.2.2* Proporsi Tenaga Kerja Pada Sektor Industri Manufaktur Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-06-03 14:05:07"
+   ],
+   "tahun": [
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 288,
+   "sha256_json": "44a9d3d767406853932ac1c69afd2b2fefdf08e81f9d5a94117779576ea4d7fe",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg11_11_1_1_a_v1241": {
+   "jenis": "dinamis",
+   "var": 1241,
+   "judul": "11.1.1.(a) Persentase Rumah Tangga yang Memiliki Akses Terhadap Hunian Yang Layak Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-04-15 03:08:40"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 393,
+   "sha256_json": "e7456ea606505e1986ba048f44a931d5c212234581b8b116ae9980214e78d23b",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg16_16_1_3_a_v1311": {
+   "jenis": "dinamis",
+   "var": 1311,
+   "judul": "16.1.3 (a) Proporsi Penduduk Yang Menjadi Korban Kejahatan Kekerasan Dalam 12 Bulan Terakhir Menurut Provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-04-30 01:52:27"
+   ],
+   "tahun": [
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 285,
+   "sha256_json": "ce796563d5698b7aed791c6fbeb7e0f9610e8077c1bd8bd4fa55e3d2169337a1",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg16_16_1_4_v1312": {
+   "jenis": "dinamis",
+   "var": 1312,
+   "judul": "16.1.4* Proporsi penduduk yang merasa aman berjalan sendirian di area tempat tinggalnya berdasarkan provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-04-30 11:34:42"
+   ],
+   "tahun": [
+    "2014",
+    "2017",
+    "2020",
+    "2025"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 143,
+   "sha256_json": "14f30e70d545fd8e5e5fac61d41fb0d220dcf493f3d64dedaa3aae05eb1297a6",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg16_16_2_1_a_v2738": {
+   "jenis": "dinamis",
+   "var": 2738,
+   "judul": "16.2.1 (a) Proporsi rumah tangga yang memiliki anak umur 1-17 tahun yang mengalami hukuman fisik dan/atau agresi psikologis dari pengasuh dalam setahun terakhir berdasarkan provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-04-30 11:37:04"
+   ],
+   "tahun": [
+    "2014",
+    "2020"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 69,
+   "sha256_json": "2729511103be3b96bc01f74f66f642310249f3ebccaf1177731a230c47e2f629",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  },
+  "sdg16_16_3_1_a_v2740": {
+   "jenis": "dinamis",
+   "var": 2740,
+   "judul": "16.3.1.(a) Proporsi korban kekerasan dalam 12 bulan terakhir yang melaporkan kepada polisi berdasarkan provinsi",
+   "satuan": "Persen",
+   "last_update": [
+    "2026-04-30 11:39:06"
+   ],
+   "tahun": [
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024"
+   ],
+   "periode": [
+    "Tahun"
+   ],
+   "baris": 135,
+   "sha256_json": "a9770f81c98c9675c9fe219ee1facb7838fa4aafe214d6f6c2df44bb46b452a5",
+   "diunduh": "2026-10-17T17:44:26+07:00"
+  }
+ },
+ "gagal": {}
+}
