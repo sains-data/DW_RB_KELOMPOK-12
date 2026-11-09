@@ -1,4 +1,13 @@
 # Capstone Data Wrangling — starter tim
+## Kelompok 12
+| Nama | NIM |
+| :--- | :--- |
+| Cerine Sihotang | 124450049 |
+| Zoland Ryo Febriano | 124450065 |
+| Bunga Clarisa Sefa | 124450097 |
+| Fitra | 124450102 |
+| Yulia Kristine Malau | 124450119 |
+
 
 Template repositori tim untuk **Capstone Data Wrangling: Indikator SDG Indonesia dari Banyak Sumber**
 (Program Studi Sains Data ITERA, Data Science Workbench). Satu tim = satu repositori yang dibuat
