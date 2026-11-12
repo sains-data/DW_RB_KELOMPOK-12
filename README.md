@@ -8,7 +8,6 @@
 | Fitra | 124450102 |
 | Yulia Kristine Malau | 124450119 |
 
-
 Template repositori tim untuk **Capstone Data Wrangling: Indikator SDG Indonesia dari Banyak Sumber**
 (Program Studi Sains Data ITERA, Data Science Workbench). Satu tim = satu repositori yang dibuat
 dari template ini.
