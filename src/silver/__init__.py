@@ -4,7 +4,9 @@ Keluaran: data/silver/silver.parquet dengan skema minimal di src/common/skema.py
 Satu baris = satu seri x wilayah x periode x rincian x berkas sumber. Nilai dari sumber berbeda
 TIDAK digabung di sini. Setiap keputusan pembersihan dicatat di log-keputusan.csv.
 
-Cakupan versi ini: seri BPS (var1172, var2153). Seri ILOSTAT masih perlu pembersih tersendiri.
+Cakupan (Sprint 1): seri BPS (var1172, var2153) dan seri ILOSTAT (SDG_0851_SEX_OCU_NB,
+SDG_0831_SEX_ECO_RT). Rincian ILOSTAT disimpan apa adanya; pemilihan rincian yang sebanding
+dengan BPS dikerjakan di Gold (Sprint 2).
 """
 from __future__ import annotations
 
@@ -22,7 +24,11 @@ from .grid import (
     sel_kosong_diharapkan,
     tandai_ekstrem,
 )
+from .ilostat import KOLOM_TAMBAHAN, bangun_silver_ilostat
 from .wilayah import INDONESIA, NAMA_PROVINSI
+
+NIM = "124450102"  # NIM Anda (dipakai pada draf log dan perintah metrics.json)
+KODE_LOG_MULAI = 12       # <-- nomor K- berikutnya setelah baris terakhir di log-keputusan.csv
 
 # Sesuaikan nilai ini dengan yang diterima src/common/skema.py bila pemeriksa skema menolaknya.
 JENIS_PERIODE_TAHUN = "tahun"
@@ -33,6 +39,8 @@ KOLOM_WAJIB = [
     "sumber", "seri_kode", "wilayah_kode", "nama_wilayah", "periode", "jenis_periode",
     "rincian", "nilai", "satuan", "_berkas_raw", "_sha256_raw",
 ]
+KOLOM_URUT = KOLOM_WAJIB + ["outlier_ekstrem"] + KOLOM_TAMBAHAN
+KUNCI_URUT = ["sumber", "seri_kode", "wilayah_kode", "periode", "rincian", "_berkas_raw"]
 JALUR_SILVER = Path("data/silver/silver.parquet")
 JALUR_LAPORAN = Path("reports")
 
@@ -43,8 +51,8 @@ def _rincian(turvar: pd.Series) -> pd.Series:
     return r.str.replace(r"\s+", "_", regex=True)
 
 
-def bangun_silver(mentah: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
-    """Ubah tabel panjang BPS hasil Tahap 1 menjadi Silver. Mengembalikan (silver, statistik)."""
+def bangun_silver_bps(mentah: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """Ubah tabel panjang BPS hasil Tahap 1 menjadi Silver BPS. Mengembalikan (silver, statistik)."""
     b = mentah[mentah["sumber"] == "bps"].copy()
     stat = {"baris_mentah_bps": len(b)}
 
@@ -96,42 +104,49 @@ def bangun_silver(mentah: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     silver = b[KOLOM_WAJIB].reset_index(drop=True)
     silver = tandai_ekstrem(silver)
     silver["periode"] = silver["periode"].astype(str)
+    stat["baris_silver_bps"] = len(silver)
+    return silver, stat
+
+
+def bangun_silver(mentah: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """Silver gabungan BPS + ILOSTAT. Baris antar-sumber ditumpuk, TIDAK digabung nilainya."""
+    s_bps, st_bps = bangun_silver_bps(mentah)
+    s_ilo, st_ilo = bangun_silver_ilostat(mentah)
+    silver = pd.concat([s_bps, s_ilo], ignore_index=True).reindex(columns=KOLOM_URUT)
+    silver["outlier_ekstrem"] = silver["outlier_ekstrem"].astype(bool)
+    silver["periode"] = silver["periode"].astype(str)
+    silver = silver.sort_values(KUNCI_URUT).reset_index(drop=True)  # urutan tetap -> hasil deterministik
+
+    stat = {**st_bps, **st_ilo}
     stat["baris_silver"] = len(silver)
     stat["baris_indonesia"] = int((silver["wilayah_kode"] == INDONESIA).sum())
+    stat["seri_silver"] = int(silver["seri_kode"].nunique())
+    stat["rincian_dienkode"] = int(silver["rincian"].nunique())
     return silver, stat
 
 
 def _draf_log(stat: dict, nim: str, mulai: int) -> str:
+    """Draf baris log-keputusan.csv khusus keputusan baru Sprint 1 (ILOSTAT)."""
     baris = []
 
     def tambah(tahap, seri, keputusan, alt, alasan, dampak):
         baris.append([f"K-{mulai + len(baris):03d}", pd.Timestamp.now().strftime("%Y-%m-%d"), nim,
                       tahap, seri, keputusan, alt, alasan, dampak])
 
-    tambah("silver", "var1172;var2153",
-           "Baris tanpa nilai (kosong atau bukan angka) tidak disimpan di Silver",
-           "Mengisi nilai kosong dengan interpolasi atau 0",
-           "Aturan baku: Silver tidak menyimpan baris tanpa nilai; celah dihitung di grid.",
-           stat["baris_nilai_kosong"] + stat["baris_nilai_tak_terbaca"])
-    if stat["baris_duplikat_dibuang"]:
-        tambah("silver", "var1172;var2153",
-               "Baris dengan kunci dan nilai identik dalam satu berkas dijadikan satu",
-               "Membiarkan baris ganda", "Kunci unik Silver tidak boleh kembar.",
-               stat["baris_duplikat_dibuang"])
-    tambah("silver", "var1172;var2153",
-           "Baris Indonesia (9999) disimpan terpisah dari 38 provinsi dan tidak ikut grid atau penanda ekstrem",
-           "Menghitung Indonesia sebagai salah satu provinsi", "Indonesia adalah agregat nasional, bukan unit provinsi.",
-           0)
-    tambah("silver", "var1172;var2153",
-           f"Provinsi ekstrem ditandai di kolom outlier_ekstrem dengan IQR 1,5 (log untuk upah) tanpa mengubah nilai; "
-           f"{stat['outlier_ditandai']} baris di berkas CSV",
-           "Menghapus atau winsorizing provinsi ekstrem", "Distribusi upah menceng; ekstrem asli bukan galat input.",
-           0)
-    tambah("gold", "var1172;var2153",
-           f"Grid 38 provinsi x tahun dibentuk dari CSV BPS; sel sebelum provinsi pemekaran berdiri tidak dihitung missing "
-           f"({stat['sel_kosong_diharapkan']} sel kosong yang diharapkan)",
-           "Menghitung semua provinsi sejak tahun pertama seri sebagai missing", "Sesuai K-001: provinsi baru hanya berisi tahun sejak berdiri.",
-           0)
+    tambah("silver", "SDG_0851_SEX_OCU_NB;SDG_0831_SEX_ECO_RT",
+           "Seluruh kombinasi dimensi ILOSTAT (SEX x OCU, SEX x ECO) disimpan di kolom rincian "
+           "(huruf kecil, digabung dengan _) beserta kolom dim_sex/dim_ocu/dim_eco; tidak ada yang dibuang",
+           "Hanya menyimpan kombinasi SEX_T + total di Silver",
+           "Pemilihan rincian yang sebanding dengan BPS dikerjakan di Gold (Sprint 2).",
+           stat["rincian_ilo"])
+    tambah("silver", "SDG_0851_SEX_OCU_NB;SDG_0831_SEX_ECO_RT",
+           "Status observasi ILOSTAT (OBS_STATUS, mis. B = patahan seri) disimpan di kolom status_obs",
+           "Membuang kolom status observasi", "Patahan seri 2021 harus tetap terlacak sampai Gold.",
+           stat["status_obs_terisi"])
+    tambah("silver", "SDG_0851_SEX_OCU_NB;SDG_0831_SEX_ECO_RT",
+           "Baris ILOSTAT (REF_AREA=IDN) diberi wilayah_kode 9999; baris tanpa nilai tidak disimpan",
+           "Mengisi nilai kosong ILOSTAT", "Aturan baku: Silver hanya memuat observasi yang ada.",
+           stat["ilo_nilai_kosong"] + stat["ilo_nilai_tak_terbaca"])
     buf = io.StringIO()
     csv.writer(buf, lineterminator="\n").writerows(baris)
     return buf.getvalue()
@@ -141,11 +156,12 @@ def jalankan(mentah: pd.DataFrame) -> pd.DataFrame:
     """Terima keluaran tahap 1, tulis dan kembalikan DataFrame Silver."""
     silver, stat = bangun_silver(mentah)
 
-    grid = bentuk_grid(silver)
+    bps = silver[silver["sumber"] == "bps"]  # grid dan uji silang CSV vs JSON hanya untuk BPS
+    grid = bentuk_grid(bps)
     lengkap = kelengkapan(grid)
     kosong = sel_kosong_diharapkan(grid)
-    uji = bandingkan_format(silver)
-    kan = pilih_kanonik(silver)
+    uji = bandingkan_format(bps)
+    kan = pilih_kanonik(bps)
     stat["outlier_ditandai"] = int(kan["outlier_ekstrem"].sum())
     stat["sel_kosong_diharapkan"] = len(kosong)
 
@@ -155,19 +171,24 @@ def jalankan(mentah: pd.DataFrame) -> pd.DataFrame:
     lengkap.to_csv(JALUR_LAPORAN / "kelengkapan_panel.csv", index=False)
     kosong.drop(columns=["diharapkan"]).to_csv(JALUR_LAPORAN / "sel_kosong_grid.csv", index=False)
 
-    print("=== SILVER BPS (TAHAP 2-4) ===")
+    print("=== SILVER BPS + ILOSTAT (TAHAP 2-4) ===")
     print(f"baris mentah BPS      : {stat['baris_mentah_bps']}")
-    print(f"nilai kosong dibuang  : {stat['baris_nilai_kosong']} (tak terbaca angka: {stat['baris_nilai_tak_terbaca']})")
-    print(f"duplikat dibuang      : {stat['baris_duplikat_dibuang']}")
-    print(f"baris Silver          : {stat['baris_silver']} (baris Indonesia: {stat['baris_indonesia']})")
+    print(f"baris mentah ILOSTAT  : {stat['baris_mentah_ilo']}")
+    print(f"nilai kosong dibuang  : BPS {stat['baris_nilai_kosong']} (tak terbaca {stat['baris_nilai_tak_terbaca']}); "
+          f"ILOSTAT {stat['ilo_nilai_kosong']} (tak terbaca {stat['ilo_nilai_tak_terbaca']})")
+    print(f"duplikat dibuang      : BPS {stat['baris_duplikat_dibuang']}; ILOSTAT {stat['ilo_duplikat_dibuang']}")
+    print(f"baris Silver          : {stat['baris_silver']} (BPS {stat['baris_silver_bps']}, "
+          f"ILOSTAT {stat['baris_silver_ilo']}; baris Indonesia {stat['baris_indonesia']})")
+    print(f"seri / rincian unik   : {stat['seri_silver']} / {stat['rincian_dienkode']} "
+          f"(rincian ILOSTAT {stat['rincian_ilo']}, status_obs terisi {stat['status_obs_terisi']})")
     print(f"uji silang CSV vs JSON: {uji}")
     print(f"outlier ditandai (CSV): {stat['outlier_ditandai']}")
     print(f"sel kosong diharapkan : {stat['sel_kosong_diharapkan']} -> reports/sel_kosong_grid.csv")
     print("Kelengkapan panel (persen terisi per tahun), disimpan di reports/kelengkapan_panel.csv:")
     print(lengkap.pivot(index="periode", columns="seri_kode", values="persen_terisi_diharapkan").to_string())
-    print("\n--- DRAF BARIS log-keputusan.csv (periksa, sesuaikan, lalu tempel; K-005 dst. setelah log Anda) ---")
-    print(_draf_log(stat, "124450065", 5))
+    print("\n--- DRAF BARIS log-keputusan.csv (periksa, sesuaikan, lalu tempel di akhir log Anda) ---")
+    print(_draf_log(stat, NIM, KODE_LOG_MULAI))
     print("--- PERINTAH metrics.json ---")
-    print(f"python -m src.common.hasil 124450065 baris_silver={stat['baris_silver']} "
-          f"sel_kosong_grid={stat['sel_kosong_diharapkan']} outlier_ditandai={stat['outlier_ditandai']}")
+    print(f"python -m src.common.hasil {NIM} seri_silver={stat['seri_silver']} "
+          f"rincian_dienkode={stat['rincian_dienkode']} baris_silver={stat['baris_silver']}")
     return silver

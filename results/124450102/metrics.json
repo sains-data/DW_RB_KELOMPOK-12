@@ -1,0 +1,10 @@
+{
+  "metrik": {
+    "seri_silver": 4,
+    "rincian_dienkode": 121,
+    "baris_silver": 2265
+  },
+  "seed": 0,
+  "data_hash": "4cf78bc413433b9dc7941096d877ec111a713e3f2339d620f7bb7844173a95a7",
+  "perangkat": "Windows AMD64 Python 3.13.14"
+}
