@@ -5,7 +5,7 @@
 | Cerine Sihotang | 124450049 | Validasi & Dokumentasi | Reproduksi & Demo |
 | Zoland Ryo Febriano | 124450065 | Ekstraksi & Lineage | Koordinator |
 | Bunga Clarisa Sefa | 124450097 | Profil & Pembersihan | Penjaga Data & Evaluasi |
-| Fitra | 124450102 |
+| Fitra | 124450102 | Transformasi & Panel|Integrator|
 | Yulia Kristine Malau | 124450119 |
 
 Template repositori tim untuk **Capstone Data Wrangling: Indikator SDG Indonesia dari Banyak Sumber**
