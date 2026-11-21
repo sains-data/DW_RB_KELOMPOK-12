@@ -37,6 +37,24 @@ Satu baris = satu seri × wilayah × periode × rincian × berkas sumber. 2.265 
 
 Semua seri tahunan. Sumber bukti per seri: `docs/katalog_seri.csv`.
 
+
+### Contoh *Lineage* Data Silver (Dapat Ditelusuri)
+
+Setiap kolom pada `data/silver/silver.parquet` memuat **tipe**, **satuan/format**, **arti (keterangan)**, dan **asal (berkas/aturan)**. Contoh penelusuran satu baris dari sumber mentah hingga lapisan Silver:
+
+1. **Sumber Mentah (`data/raw`) & Integritas (`_berkas_raw`, `_sha256_raw`):**
+   * Berkas asal: `data/raw/ilostat/2026-10-20/data/DF_SDG_0851_SEX_OCU_NB.csv` (diverifikasi hash SHA-256-nya terhadap `MANIFEST.csv` oleh `src/common/skema.py`).
+2. **Pemetaan Identitas Seri & Sumber (`sumber`, `seri_kode`, `satuan`):**
+   * Folder `ilostat` dipetakan menjadi `sumber = "ilostat"`.
+   * Nama berkas tanpa awalan `DF_` menghasilkan `seri_kode = "SDG_0851_SEX_OCU_NB"`.
+   * Berdasarkan `docs/katalog_seri.csv` (`UNIT_MEASURE=LC`, mata uang IDR), ditetapkan `satuan = "rupiah_per_jam"`.
+3. **Standardisasi Wilayah & Waktu (`wilayah_kode`, `nama_wilayah`, `periode`, `jenis_periode`):**
+   * `REF_AREA = "IDN"` dipetakan sesuai aturan **K-001** menjadi `wilayah_kode = 9999` dan `nama_wilayah = "Indonesia"`.
+   * `TIME_PERIOD = 2023` disimpan sebagai `periode = "2023"` dengan `jenis_periode = "tahun"`.
+4. **Rincian Dimensi, Nilai & Penanda Kualitas (`rincian`, `dim_sex`, `dim_ocu`, `dim_eco`, `nilai`, `status_obs`, `outlier_ekstrem`):**
+   * Dimensi SDMX dipetakan sesuai **K-012** (misal `dim_sex = "SEX_T"`, `dim_ocu = "OCU_ISCO08_TOTAL"`, `dim_eco = None`, membentuk `rincian = "sex_t_ocu_total"`).
+   * `OBS_VALUE` disimpan apa adanya ke `nilai` (float, satuan `rupiah_per_jam`), status observasi mengikuti **K-013** ke `status_obs`, dan `outlier_ekstrem = False` (aturan **K-007** untuk Indonesia/ILOSTAT).
+
 ## data/gold/<tabel>.parquet
 
 | Kolom | Tipe | Satuan/format | Boleh kosong | Rentang atau nilai sah | Asal (berkas/aturan) | Keterangan |
