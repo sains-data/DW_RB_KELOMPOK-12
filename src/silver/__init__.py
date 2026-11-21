@@ -27,7 +27,7 @@ from .grid import (
 from .ilostat import KOLOM_TAMBAHAN, bangun_silver_ilostat
 from .wilayah import INDONESIA, NAMA_PROVINSI
 
-NIM = "124450102"  # NIM Anda (dipakai pada draf log dan perintah metrics.json)
+NIM = "124450102" 
 KODE_LOG_MULAI = 12       # <-- nomor K- berikutnya setelah baris terakhir di log-keputusan.csv
 
 # Sesuaikan nilai ini dengan yang diterima src/common/skema.py bila pemeriksa skema menolaknya.
@@ -186,8 +186,6 @@ def jalankan(mentah: pd.DataFrame) -> pd.DataFrame:
     print(f"sel kosong diharapkan : {stat['sel_kosong_diharapkan']} -> reports/sel_kosong_grid.csv")
     print("Kelengkapan panel (persen terisi per tahun), disimpan di reports/kelengkapan_panel.csv:")
     print(lengkap.pivot(index="periode", columns="seri_kode", values="persen_terisi_diharapkan").to_string())
-    print("\n--- DRAF BARIS log-keputusan.csv (periksa, sesuaikan, lalu tempel di akhir log Anda) ---")
-    print(_draf_log(stat, NIM, KODE_LOG_MULAI))
     print("--- PERINTAH metrics.json ---")
     print(f"python -m src.common.hasil {NIM} seri_silver={stat['seri_silver']} "
           f"rincian_dienkode={stat['rincian_dienkode']} baris_silver={stat['baris_silver']}")
