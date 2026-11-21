@@ -7,3 +7,7 @@ data/LISENSI.md
 __pycache__/
 .ipynb_checkpoints/
 .venv/
+personal/
+cek_ilo.py
+eksekusi.md
+cek_katalog.py
