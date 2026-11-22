@@ -87,6 +87,13 @@ def main():
     print("Muatan Silver pertama berhasil:")
     for s, k, n in ringkasan:
         print(f" - {s} | {k}: {n} baris")
+
+    total = con.execute("SELECT COUNT(*) FROM silver_indikator").fetchone()[0]
+    print(f"\nTotal seluruh baris di silver_indikator: {total}")
+    print("\nSampel 5 baris pertama:")
+    for row in con.execute("SELECT * FROM silver_indikator LIMIT 5").fetchall():
+        print(row)
+
     con.close()
 
 
