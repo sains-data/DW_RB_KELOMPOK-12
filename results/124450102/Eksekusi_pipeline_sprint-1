@@ -1,3 +1,6 @@
+jalan sampai silver, namun errror di bagian gold karena belum masuk sprint
+
+
 PS C:\Users\fitra\workbench-workspace\capstone-data-wrangling> python pipeline.py          
 data/raw: 10 berkas cocok dengan MANIFEST.csv
 === RINGKASAN EKSTRAKSI (TAHAP 1) ===
@@ -36,5 +39,15 @@ periode
 2024         100.0    100.0
 2025         100.0    100.0
 --- PERINTAH metrics.json ---
-python -m src.common.hasil 124450102 seri_silver=4 rincian_dienkode=121 baris_silver=2265
-silver     selesai dalam 0.4 s
+Traceback (most recent call last):
+  File "C:\Users\fitra\workbench-workspace\capstone-data-wrangling\pipeline.py", line 34, in <module>
+    main()
+  File "C:\Users\fitra\workbench-workspace\capstone-data-wrangling\pipeline.py", line 26, in main
+    hasil[nama] = langkah(hasil)
+                  ~~~~~~~^^^^^^^
+  File "C:\Users\fitra\workbench-workspace\capstone-data-wrangling\pipeline.py", line 23, in <lambda>
+    ("gold", lambda h: gold.jalankan(h["silver"])),
+                       ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\fitra\workbench-workspace\capstone-data-wrangling\src\gold\__init__.py", line 10, in jalankan
+    raise NotImplementedError("Tahap 4–6: grid lengkap, reshape panel, rekonsiliasi pembanding, simpan ke SQL")
+NotImplementedError: Tahap 4–6: grid lengkap, reshape panel, rekonsiliasi pembanding, simpan ke SQL
