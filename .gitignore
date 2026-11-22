@@ -11,3 +11,5 @@ personal/
 cek_ilo.py
 eksekusi.md
 cek_katalog.py
+data/*.duckdb
+data/*.duckdb.wal
