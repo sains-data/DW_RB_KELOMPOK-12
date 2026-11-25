@@ -1,10 +1,9 @@
-"""Tahap 4–6 — Reshape, integrasi, dan penyimpanan ke Gold (pertemuan VII, IX, XI, XII). Milik tim.
+﻿"""Tahap 4-6 - Reshape, integrasi, dan penyimpanan ke Gold. Milik tim."""
 
-Keluaran: data/gold/*.parquet (panel provinsi x tahun x indikator siap analisis, plus tabel
-rekonsiliasi dengan pembanding nasional) dan basis data SQL (mis. data/gold/gold.sqlite).
-"""
+from src.gold.tabel_nasional import bangun_tabel_nasional_gold
 
 
-def jalankan(silver):
-    """Terima Silver, tulis tabel Gold, kembalikan {nama_tabel: DataFrame}."""
-    raise NotImplementedError("Tahap 4–6: grid lengkap, reshape panel, rekonsiliasi pembanding, simpan ke SQL")
+def jalankan(silver=None):
+    """Bangun tabel Gold dan kembalikan kamus {nama_tabel: DataFrame}."""
+    tabel_nasional = bangun_tabel_nasional_gold()
+    return {"tabel_nasional_gold": tabel_nasional}
