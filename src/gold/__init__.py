@@ -1,10 +1,15 @@
-"""Tahap 4–6 — Reshape, integrasi, dan penyimpanan ke Gold (pertemuan VII, IX, XI, XII). Milik tim.
-
-Keluaran: data/gold/*.parquet (panel provinsi x tahun x indikator siap analisis, plus tabel
-rekonsiliasi dengan pembanding nasional) dan basis data SQL (mis. data/gold/gold.sqlite).
-"""
+﻿from pathlib import Path
+import pandas as pd
+from .aturan_gold import bangun_gold_dari_silver
 
 
-def jalankan(silver):
-    """Terima Silver, tulis tabel Gold, kembalikan {nama_tabel: DataFrame}."""
-    raise NotImplementedError("Tahap 4–6: grid lengkap, reshape panel, rekonsiliasi pembanding, simpan ke SQL")
+def jalankan(df_silver: pd.DataFrame) -> pd.DataFrame:
+    df_gold, _ = bangun_gold_dari_silver(
+        df_silver=df_silver,
+        path_log="log-keputusan.csv",
+    )
+
+    path_out = Path("data/gold/panel.parquet")
+    path_out.parent.mkdir(parents=True, exist_ok=True)
+    df_gold.to_parquet(path_out, index=False)
+    return df_gold
