@@ -54,3 +54,19 @@ Lapisan Silver (`data/silver/silver.parquet`, **1.362 baris**) telah diuji mengg
 | Fitra | 124450102 | Transformasi dan panel | Integrator | Koreksi katalog & struktur panel Silver (`docs/katalog_seri.csv`, integrasi PR ke `main`) |
 | Cerine Sihotang | 124450049 | Integrasi, penyimpanan, dan skala | Reproduksi & Demo | Integrasi dan rekonsiliasi serta uji reproduksibilitas (`DEMO.md`) |
 | Yulia Kristine Malau | 124450119 | Validasi dan dokumentasi | Penjaga Data & Evaluasi | Validasi dan reproduksibilitas (`src/validasi/`, pemeriksaan skema & `MANIFEST.csv`) |
+## Data dan lineage
+
+### Penyimpanan Relasional (Tahap 5) dan Perbandingan dengan Dokumen JSON Mentah
+
+Pada Tahap 5, seluruh keluaran terstruktur (*Silver*, *Panel Gold*, *Pembanding Nasional*, dan *Rekonsiliasi*) dimuat ke dalam basis data relasional **DuckDB** (`data/warehouse.duckdb`) menggunakan skema DDL eksplisit pada `sql/schema.sql`. Setiap tabel dilengkapi kunci primer (*Primary Key*) komposit untuk mencegah duplikasi entitas serta tipe kolom ketat (`DOUBLE`, `INTEGER`, `VARCHAR`, `BOOLEAN`) agar kalkulasi panel dan rekonsiliasi berjalan deterministik.
+
+| Aspek | Dokumen JSON Mentah (NoSQL / Document Store) | Tabel Relasional SQL (DuckDB) |
+| :--- | :--- | :--- |
+| **Struktur & Skema** | *Schema-on-read*; bersarang (*nested*) dan heterogen antara API BPS dan SDMX/DSD ILOSTAT. | *Schema-on-write*; tabular datar dengan tipe data ketat dan *Primary Key*. |
+| **Integritas Data** | Tidak otomatis menolak duplikasi kunci wilayah-tahun atau inkonsistensi tipe nilai numerik. | Menegakkan integritas entitas lewat *Primary Key* dan validasi tipe data sejak dimuat. |
+| **Kinerja Kueri Analitik** | Lambat untuk *join* lintas indikator dan agregasi panel karena harus mem-parsing dokumen penuh. | Sangat cepat untuk kueri analitik (*columnar storage*) dan penggabungan antarseri. |
+| **Keterlacakan (*Lineage*)** | Menyimpan struktur hierarki dan metadata sumber asli apa adanya. | Menjaga keterlacakan melalui kolom eksplisit (`_berkas_raw` dan `_sha256_raw`) yang tertaut ke berkas mentah. |
+
+#### Mengapa Pendekatan Ini Cocok untuk Lapis Tertentu
+1. **Lapis *Raw* (Dokumen JSON & CSV Mentah):** Cocok dipertahankan sebagai *immutable landing zone* karena respons API BPS (`sdg8_upah.json`, `manifest_asal.json`) dan metadata SDMX ILOSTAT (`dataflow.json`, `dsd/*.json`) memiliki struktur hierarkis yang berbeda-beda[cite: 2, 4].
+2. **Lapis *Silver* dan *Gold* (Tabel Relasional DuckDB + Parquet):** Setelah ekstraksi dan pembersihan, data berubah menjadi pengamatan panel kuantitatif (38 provinsi x periode x indikator)[cite: 2, 3]. DuckDB sangat cocok karena menjamin keunikan kunci panel lewat *Primary Key*, berjalan *in-process* tanpa *server* terpisah, membaca berkas `.parquet` secara langsung, serta siap dipakai untuk uji skalabilitas Tahap 7[cite: 3].
