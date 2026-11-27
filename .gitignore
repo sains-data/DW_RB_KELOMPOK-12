@@ -13,3 +13,4 @@ eksekusi.md
 cek_katalog.py
 data/*.duckdb
 data/*.duckdb.wal
+cek_silver.py
