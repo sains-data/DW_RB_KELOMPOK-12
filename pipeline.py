@@ -1,4 +1,4 @@
-﻿"""Satu perintah reproduksi tim: data mentah -> Silver -> Gold -> validasi -> SQL (DuckDB).
+"""Satu perintah reproduksi tim: data mentah -> Silver -> Gold -> validasi -> SQL (DuckDB).
 
     python unduh_data.py --kasus <N>     # sekali, isi data/raw/
     python pipeline.py
@@ -24,6 +24,8 @@ def muat_ke_sql(db_path: str = "data/warehouse.duckdb", ddl_path: str = "sql/sch
 
     con = duckdb.connect(db_path)
     ddl_sql = Path(ddl_path).read_text(encoding="utf-8")
+    print("\n=== DDL SKEMA SQL (sql/schema.sql) ===")
+    print(ddl_sql)
     con.execute(ddl_sql)
 
     pemetaan_tabel = {
