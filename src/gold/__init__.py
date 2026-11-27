@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Tahap 4-6 - Reshape, integrasi, dan penyimpanan ke Gold. Milik tim.
 
 Tahap 4 (modul ini): panel provinsi x periode x indikator untuk var1172 dan var2153 ->
@@ -97,3 +98,29 @@ def jalankan(silver: pd.DataFrame) -> dict:
           f"seri_panel={stat['seri_panel']} baris_gold={stat['baris_gold']}")
     return {"panel_provinsi_sdg8": panel, "panel_provinsi_sdg8_lebar": lebar,
             "tabel_nasional_gold": tabel_nasional}
+=======
+﻿"""Tahap 4-6 - Reshape, integrasi, dan penyimpanan ke Gold. Milik tim."""
+from pathlib import Path
+import pandas as pd
+
+from .aturan_gold import bangun_gold_dari_silver
+from .tabel_nasional import bangun_tabel_nasional_gold
+
+
+def jalankan(df_silver: pd.DataFrame) -> dict[str, pd.DataFrame]:
+    df_gold, _ = bangun_gold_dari_silver(
+        df_silver=df_silver,
+        path_log="log-keputusan.csv",
+    )
+
+    path_panel = Path("data/gold/panel.parquet")
+    path_panel.parent.mkdir(parents=True, exist_ok=True)
+    df_gold.to_parquet(path_panel, index=False)
+
+    tabel_nasional, rekonsiliasi = bangun_tabel_nasional_gold(df_silver=df_silver)
+    return {
+        "panel": df_gold,
+        "tabel_nasional_gold": tabel_nasional,
+        "rekonsiliasi_nasional": rekonsiliasi,
+    }
+>>>>>>> tahap6-rekonsiliasi-124450049

@@ -6,24 +6,35 @@ PASANGAN_SERI = {
     "var1172": {
         "seri_pembanding": "SDG_0851_SEX_OCU_NB",
         "satuan_utama": "rupiah_per_jam",
-        "satuan_pembanding": "LCU_per_jam",
+        "satuan_pembanding": "rupiah_per_jam",
+        "kategori_penjelasan": "metode berbeda",
+        "bukti_penjelasan": (
+            "Satuan disamakan ke Rupiah nominal per jam (LCU_per_jam = IDR/jam). "
+            "Selisih muncul karena perbedaan metode estimasi/pembulatan Sakernas BPS (snapshot 2026-10-17) "
+            "dengan pengolahan mikrodata ILOSTAT (snapshot 2026-10-20)."
+        ),
         "aturan_agregasi_provinsi": (
             "Jika baris nasional (wilayah_kode=9999) tidak tersedia, agregasikan baris provinsi "
-            "dengan bobot rata-rata tertimbang jumlah pekerja/observasi valid per periode "
-            "(alasan: rata-rata aritmatik provinsi tanpa bobot mendistorsi ukuran angkatan kerja antarprovinsi)."
+            "dengan bobot rata-rata tertimbang jumlah pekerja/observasi valid per periode."
         ),
-        "catatan_padanan": "Padanan nasional tersedia (IDN / wilayah_kode=9999); perbedaan metode & vintage survei.",
+        "catatan_padanan": "Padanan nasional tersedia (IDN / wilayah_kode=9999); metode berbeda & vintage berbeda.",
     },
     "var2153": {
         "seri_pembanding": "SDG_0831_SEX_ECO_RT",
         "satuan_utama": "persen",
-        "satuan_pembanding": "PT",
+        "satuan_pembanding": "persen",
+        "kategori_penjelasan": "definisi berbeda",
+        "bukti_penjelasan": (
+            "Cakupan sektor disamakan pada total seluruh sektor termasuk pertanian (ECO_SECTOR_TOTAL / ECO_AGGREGATE_TOTAL). "
+            "Selisih sekitar 24-25 poin persen terjadi karena definisi berbeda: BPS memakai pendekatan proksi status pekerjaan "
+            "(berusaha sendiri, dibantu buruh tidak tetap, pekerja bebas, pekerja keluarga), sedangkan ILOSTAT memakai kriteria "
+            "ICLS ke-17/21 (kepemilikan jaminan sosial & pembukuan unit usaha)."
+        ),
         "aturan_agregasi_provinsi": (
             "Jika baris nasional (wilayah_kode=9999) tidak tersedia, agregasikan baris provinsi "
-            "dengan bobot proporsi pekerja per provinsi pada periode terkait "
-            "(alasan: proporsi informalitas antarprovinsi tidak setara tanpa bobot populasi bekerja)."
+            "dengan bobot proporsi pekerja per provinsi pada periode terkait."
         ),
-        "catatan_padanan": "Padanan nasional tersedia (IDN / wilayah_kode=9999); perbedaan definisi/cakupan sektor.",
+        "catatan_padanan": "Padanan nasional tersedia (IDN / wilayah_kode=9999); definisi berbeda (proksi status BPS vs ICLS ILO).",
     },
 }
 
@@ -108,13 +119,17 @@ def _ekstrak_nasional_ilo(df_silver: pd.DataFrame, seri_kode: str) -> pd.DataFra
 
 
 def bangun_tabel_nasional_gold(
+    df_silver: pd.DataFrame | None = None,
     silver_path: str = "data/silver/silver.parquet",
     out_parquet: str = "data/gold/tabel_nasional_gold.parquet",
     out_csv: str = "data/gold/tabel_nasional_gold.csv",
-) -> pd.DataFrame:
-    df_silver = pd.read_parquet(silver_path)
-    frames = []
+    out_rek_parquet: str = "data/gold/rekonsiliasi_nasional.parquet",
+    out_rek_csv: str = "data/gold/rekonsiliasi_nasional.csv",
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    if df_silver is None:
+        df_silver = pd.read_parquet(silver_path)
 
+    frames = []
     for seri_utama, meta in PASANGAN_SERI.items():
         seri_pembanding = meta["seri_pembanding"]
         utama = _ekstrak_nasional_bps(df_silver, seri_utama, meta["aturan_agregasi_provinsi"])
@@ -123,21 +138,33 @@ def bangun_tabel_nasional_gold(
         gab = pd.merge(utama, pembanding, on="periode_int", how="outer").sort_values("periode_int")
         gab["periode"] = gab["periode_int"].astype(int)
         gab["seri_utama"] = seri_utama
-        gab["seri_pembanding"] = gab.get("seri_pembanding", pd.Series(index=gab.index, dtype="object")).fillna(seri_pembanding)
+        gab["seri_pembanding"] = seri_pembanding
         gab["satuan_utama"] = gab["satuan_utama"].fillna(meta["satuan_utama"])
-        gab["satuan_pembanding"] = gab["satuan_pembanding"].fillna(meta["satuan_pembanding"])
+        gab["satuan_pembanding"] = meta["satuan_pembanding"]
         gab["metode_utama"] = gab["metode_utama"].fillna("tidak_ada_padanan_nasional")
         gab["aturan_agregasi_provinsi"] = gab["aturan_agregasi_provinsi"].fillna(
             f"Seri {seri_utama} tidak memiliki padanan/baris pada periode ini."
         )
-        gab["catatan_padanan"] = np.where(
-            gab["nilai_utama"].notna() & gab["nilai_pembanding"].notna(),
-            meta["catatan_padanan"],
+
+        berpasangan = gab["nilai_utama"].notna() & gab["nilai_pembanding"].notna()
+        gab["kategori_penjelasan"] = np.where(
+            berpasangan,
+            meta["kategori_penjelasan"],
+            "tanpa pasangan",
+        )
+        gab["bukti_penjelasan"] = np.where(
+            berpasangan,
+            meta["bukti_penjelasan"],
             np.where(
                 gab["nilai_utama"].notna(),
                 "Nilai utama tersedia; seri pembanding tidak tersedia pada periode ini.",
                 "Seri pembanding tersedia; nilai utama tidak tersedia pada periode ini.",
             ),
+        )
+        gab["catatan_padanan"] = np.where(
+            berpasangan,
+            meta["catatan_padanan"],
+            gab["bukti_penjelasan"],
         )
         gab["selisih_nilai"] = (gab["nilai_utama"] - gab["nilai_pembanding"]).round(4)
 
@@ -159,6 +186,8 @@ def bangun_tabel_nasional_gold(
                     "nilai_pembanding",
                     "satuan_pembanding",
                     "selisih_nilai",
+                    "kategori_penjelasan",
+                    "bukti_penjelasan",
                     "metode_utama",
                     "aturan_agregasi_provinsi",
                     "catatan_padanan",
@@ -171,15 +200,36 @@ def bangun_tabel_nasional_gold(
 
     hasil = pd.concat(frames, ignore_index=True).sort_values(["periode", "seri_utama"]).reset_index(drop=True)
 
+    # Susun tabel khusus rekonsiliasi nasional dengan kolom eksplisit sesuai panduan Tahap 6
+    rekonsiliasi = hasil[
+        [
+            "periode",
+            "seri_utama",
+            "nilai_utama",
+            "satuan_utama",
+            "seri_pembanding",
+            "nilai_pembanding",
+            "satuan_pembanding",
+            "selisih_nilai",
+            "kategori_penjelasan",
+            "bukti_penjelasan",
+            "_berkas_raw",
+        ]
+    ].rename(
+        columns={
+            "nilai_utama": "nilai_seri_utama",
+            "selisih_nilai": "selisih",
+        }
+    )
+
     Path(out_parquet).parent.mkdir(parents=True, exist_ok=True)
     hasil.to_parquet(out_parquet, index=False)
     hasil.to_csv(out_csv, index=False)
-    return hasil
+    rekonsiliasi.to_parquet(out_rek_parquet, index=False)
+    rekonsiliasi.to_csv(out_rek_csv, index=False)
+    return hasil, rekonsiliasi
 
 
 if __name__ == "__main__":
-    df_out = bangun_tabel_nasional_gold()
-    print(f"Baris: {len(df_out)} | Kolom: {df_out.columns.tolist()}")
-    print(df_out[["periode", "seri_utama", "nilai_utama", "seri_pembanding", "nilai_pembanding", "selisih_nilai"]].to_string(index=False))
-
-
+    _, df_rek = bangun_tabel_nasional_gold()
+    print(df_rek.to_string(index=False))
