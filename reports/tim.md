@@ -9,6 +9,15 @@ Kasus 12 menangani integrasi indikator tingkat provinsi BPS — **Upah Rata-Rata
 ## Data dan lineage
 Data mentah berasal dari **10 berkas** (`data/raw/MANIFEST.csv`) yang mencakup **2 format BPS** (CSV dan JSON snapshot `2026-10-17` untuk `var1172` dan `var2153`) serta **seri pembanding ILOSTAT** (`SDG_0851_SEX_OCU_NB` dan `SDG_0831_SEX_ECO_RT`), dengan total **681 kunci observasi BPS** (**393** baris `var1172` dan **288** baris `var2153`). Setiap baris pada lapisan Silver menyimpan jejak asal berkas melalui kolom `_berkas_raw` (jalur relatif berkas di `data/raw/`) dan `_sha256_raw` (hash SHA-256 berkas sumber yang diverifikasi terhadap `MANIFEST.csv` saat `unduh_data.py --kasus 12` dan `pipeline.py` dijalankan). Tidak dilakukan penarikan ulang API di luar snapshot resmi `2026-10-17` karena reproduksibilitas Sprint 1 dikunci pada paket rilis `data-2026.1`.
 
+### Penyimpanan SQL (DuckDB) vs Dokumen JSON Mentah
+
+Pada Tahap 5, skema relasional dari Sprint 1 (sql/schema_silver.sql) diperluas menjadi sql/schema.sql dan dimuat otomatis oleh pipeline.py ke dalam basis data analitik **DuckDB** (data/warehouse.duckdb, dikecualikan dari Git) yang mencakup empat tabel ber-PRIMARY KEY dan tipe kolom eksplisit: silver_indikator (2.265 baris), gold_panel (681 baris), gold_tabel_nasional (28 baris), dan gold_rekonsiliasi (28 baris).
+
+- **Perbandingan dengan JSON mentah (penyimpanan dokumen):** Menyimpan respons JSON mentah sebagai dokumen (*schema-on-read*) mempertahankan struktur bersarang asli dari API BPS dan ILOSTAT tanpa risiko kehilangan atribut saat ekstraksi awal, tetapi kurang efisien untuk analitik karena tidak menegakkan tipe data numerik/kunci primer, memakan ruang penyimpanan lebih besar, serta lambat untuk agregasi lintas provinsi dan periode.
+- **Alasan pemilihan pendekatan per lapisan:**
+  - **Lapisan Bronze (data/raw/):** Menggunakan berkas **JSON/CSV mentah** beserta verifikasi hash _sha256_raw agar bukti audit sumber asli tetap utuh dan tahan terhadap perubahan struktur respons API.
+  - **Lapisan Silver & Gold (data/silver/, data/gold/, dan DuckDB):** Menggunakan format kolumnar **Parquet** yang dimuat ke **DuckDB** (*schema-on-write*). DuckDB dipilih karena bersifat *embedded* (tanpa server terpisah sehingga reproduktif dalam satu perintah python pipeline.py), membaca Parquet secara langsung tanpa *overhead* serialisasi, serta menegakkan integritas entitas lewat PRIMARY KEY komposit dan tipe data ketat untuk kueri panel maupun rekonsiliasi nasional.
+
 ## Masalah data dan penanganannya
 
 Seluruh temuan pada bagian ini ditarik langsung dari lapisan Silver (`data/silver/silver.parquet`, **1.362 baris**; `results/124450097/metrics.json` baris 3), laporan kelengkapan panel (`reports/kelengkapan_panel.csv` baris 2–17), hasil profil Tahap 2 (`reports/profil-tahap2.md`), serta tercatat pada `log-keputusan.csv` (`K-001` s.d. `K-011`, baris 2–12).
