@@ -1,11 +1,20 @@
+<<<<<<< HEAD
 ﻿from pathlib import Path
 import pandas as pd
 
 from .aturan_gold import bangun_gold_dari_silver
 from . import rekonsiliasi_nasional as _rek
-
+=======
 """Tahap 4-6 - Reshape, integrasi, dan penyimpanan ke Gold. Milik tim."""
+from pathlib import Path
+import pandas as pd
 
+from .aturan_gold import bangun_gold_dari_silver
+from .tabel_nasional import bangun_tabel_nasional_gold
+>>>>>>> origin/main
+
+
+<<<<<<< HEAD
 
 def _bangun_panel_lebar(df_gold: pd.DataFrame) -> pd.DataFrame:
     kol_idx = [k for k in ["wilayah_kode", "nama_wilayah", "periode", "jenis_periode", "rincian"] if k in df_gold.columns]
@@ -56,6 +65,9 @@ def jalankan(df_silver: pd.DataFrame) -> pd.DataFrame:
     out_dir = Path("data/gold")
     out_dir.mkdir(parents=True, exist_ok=True)
 
+=======
+def jalankan(df_silver: pd.DataFrame) -> dict[str, pd.DataFrame]:
+>>>>>>> origin/main
     df_gold, _ = bangun_gold_dari_silver(
         df_silver=df_silver,
         path_log="log-keputusan.csv",
@@ -71,4 +83,17 @@ def jalankan(df_silver: pd.DataFrame) -> pd.DataFrame:
     df_rekonsiliasi = _bangun_rekonsiliasi(df_silver, df_gold, df_nasional)
     df_rekonsiliasi.to_parquet(out_dir / "rekonsiliasi.parquet", index=False)
 
+<<<<<<< HEAD
     return df_gold
+=======
+    path_panel = Path("data/gold/panel.parquet")
+    path_panel.parent.mkdir(parents=True, exist_ok=True)
+    df_gold.to_parquet(path_panel, index=False)
+
+    tabel_nasional, rekonsiliasi = bangun_tabel_nasional_gold(df_silver=df_silver)
+    return {
+        "panel": df_gold,
+        "tabel_nasional_gold": tabel_nasional,
+        "rekonsiliasi_nasional": rekonsiliasi,
+    }
+>>>>>>> origin/main

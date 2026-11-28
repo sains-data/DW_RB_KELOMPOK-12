@@ -13,3 +13,15 @@ eksekusi.md
 cek_katalog.py
 data/*.duckdb
 data/*.duckdb.wal
+<<<<<<< HEAD
+cek_silver.py
+=======
+*.db
+>>>>>>> tahap6-rekonsiliasi-124450049
+
+# Berkas basis data & data mentah besar (Tahap 5)
+*.duckdb
+*.duckdb.wal
+*.db
+*.sqlite
+*.sqlite3
