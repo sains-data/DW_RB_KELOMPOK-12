@@ -71,3 +71,7 @@ PERINGATAN upah_riil_rp_jam kosong semua: berkas data/ref/ihk_tahunan.csv belum 
 LOLOS semua pemeriksaan. Perintah bukti artefak:
 python -m src.common.hasil 124450102 seri_silver=4 rincian_dienkode=121 baris_silver=2265 seri_panel=2 baris_gold=678
 PS C:\Users\fitra\workbench-workspace\capstone-data-wrangling> 
+
+PS C:\Users\fitra\workbench-workspace\capstone-data-wrangling> python -m src.common.hasil 124450102 seri_silver=4 rincian_dienkode=121 baris_silver=2265 seri_panel=2 baris_gold=678
+C:\Users\fitra\workbench-workspace\capstone-data-wrangling\results\124450102\metrics.json
+PS C:\Users\fitra\workbench-workspace\capstone-data-wrangling> 
