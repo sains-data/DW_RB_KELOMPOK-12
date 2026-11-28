@@ -11,12 +11,12 @@ Data mentah berasal dari **10 berkas** (`data/raw/MANIFEST.csv`) yang mencakup *
 
 ### Penyimpanan SQL (DuckDB) vs Dokumen JSON Mentah
 
-Pada Tahap 5, skema relasional dari Sprint 1 (sql/schema_silver.sql) diperluas menjadi sql/schema.sql dan dimuat otomatis oleh pipeline.py ke dalam basis data analitik **DuckDB** (data/warehouse.duckdb, dikecualikan dari Git) yang mencakup empat tabel ber-PRIMARY KEY dan tipe kolom eksplisit: silver_indikator (2.265 baris), gold_panel (681 baris), gold_tabel_nasional (28 baris), dan gold_rekonsiliasi (28 baris).
+Pada Tahap 5, skema relasional dari Sprint 1 (`sql/schema_silver.sql`) diperluas menjadi `sql/schema.sql` dan dimuat otomatis oleh `pipeline.py` ke dalam basis data analitik **DuckDB** (`data/warehouse.duckdb`, dikecualikan dari Git) yang mencakup empat tabel ber-PRIMARY KEY dan tipe kolom eksplisit: `silver_indikator` (2.265 baris), `gold_panel` (681 baris), `gold_tabel_nasional` (28 baris), dan `gold_rekonsiliasi` (28 baris).
 
 - **Perbandingan dengan JSON mentah (penyimpanan dokumen):** Menyimpan respons JSON mentah sebagai dokumen (*schema-on-read*) mempertahankan struktur bersarang asli dari API BPS dan ILOSTAT tanpa risiko kehilangan atribut saat ekstraksi awal, tetapi kurang efisien untuk analitik karena tidak menegakkan tipe data numerik/kunci primer, memakan ruang penyimpanan lebih besar, serta lambat untuk agregasi lintas provinsi dan periode.
 - **Alasan pemilihan pendekatan per lapisan:**
-  - **Lapisan Bronze (data/raw/):** Menggunakan berkas **JSON/CSV mentah** beserta verifikasi hash _sha256_raw agar bukti audit sumber asli tetap utuh dan tahan terhadap perubahan struktur respons API.
-  - **Lapisan Silver & Gold (data/silver/, data/gold/, dan DuckDB):** Menggunakan format kolumnar **Parquet** yang dimuat ke **DuckDB** (*schema-on-write*). DuckDB dipilih karena bersifat *embedded* (tanpa server terpisah sehingga reproduktif dalam satu perintah python pipeline.py), membaca Parquet secara langsung tanpa *overhead* serialisasi, serta menegakkan integritas entitas lewat PRIMARY KEY komposit dan tipe data ketat untuk kueri panel maupun rekonsiliasi nasional.
+  - **Lapisan Bronze (`data/raw/`):** Menggunakan berkas **JSON/CSV mentah** beserta verifikasi hash `_sha256_raw` agar bukti audit sumber asli tetap utuh dan tahan terhadap perubahan struktur respons API.
+  - **Lapisan Silver & Gold (`data/silver/`, `data/gold/`, dan DuckDB):** Menggunakan format kolumnar **Parquet** yang dimuat ke **DuckDB** (*schema-on-write*). DuckDB dipilih karena bersifat *embedded* (tanpa server terpisah sehingga reproduktif dalam satu perintah `python pipeline.py`), membaca Parquet secara langsung tanpa *overhead* serialisasi, serta menegakkan integritas entitas lewat PRIMARY KEY komposit dan tipe data ketat untuk kueri panel maupun rekonsiliasi nasional.
 
 ## Masalah data dan penanganannya
 
@@ -32,16 +32,16 @@ Seluruh temuan pada bagian ini ditarik langsung dari lapisan Silver (`data/silve
 
 ## Integrasi dan rekonsiliasi
 
-Integrasi nasional pada lapisan Gold menyandingkan seri provinsi BPS (`var1172` dan `var2153`) dengan pembanding nasional ILOSTAT (`SDG_0851_SEX_OCU_NB` dan `SDG_0831_SEX_ECO_RT`) pada **11 periode tahunan (2015–2025)** dalam `data/gold/tabel_nasional_periode_seri.csv`, sejalan dengan keputusan `K-003`, `K-004`, `K-009`, serta aturan Gold (`rincian_sebanding_panel`, `prioritas_jenis_periode`, dan `satu_nilai_per_sel_snapshot`) di `log-keputusan.csv`. Selisih dihitung tanpa menghapus atau memaksa nilai agar sama, dan baris/tahun tanpa pasangan dibiarkan kosong sesuai ketersediaan data.
+Integrasi nasional pada lapisan Gold menyandingkan seri provinsi BPS (`var1172` dan `var2153`) dengan pembanding nasional ILOSTAT (`SDG_0851_SEX_OCU_NB` dan `SDG_0831_SEX_ECO_RT`) pada **11 periode tahunan (`2015–2025`)** dalam berkas `data/gold/tabel_nasional_periode_seri.csv` (kolom `periode`, `bps_var1172_upah`, `ilo_0851_upah_total`, `selisih_upah`, `kategori_upah`, `bps_var2153_informal`, `ilo_0831_informal_total`, `selisih_informal`, dan `kategori_informal`), sejalan dengan keputusan `K-003` (baris 4), `K-004` (baris 5), dan `K-009` (baris 10) serta aturan Gold (`rincian_sebanding_panel`, `prioritas_jenis_periode`, dan `satu_nilai_per_sel_snapshot`) di `log-keputusan.csv`. Selisih dihitung tanpa menghapus atau memaksa nilai agar sama, dan baris/tahun tanpa pasangan dibiarkan kosong sesuai ketersediaan data.
 
-| Pasangan | Seri dibandingkan | Tahun berpasangan (`selisih` terisi) | Rentang besar selisih (`nilai_utama − pembanding`) | Median selisih | Kategori tercatat |
+| Pasangan | Seri dibandingkan (kolom sumber) | Tahun berpasangan (`selisih_*` terisi) | Rentang besar selisih (`nilai_utama − pembanding`) | Median selisih | Kategori tercatat (`kategori_*`) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Upah per jam** | `bps_var1172_upah` vs `ilo_0851_upah_total` (`SEX_T + OCU_SKILL_TOTAL`) | 8 tahun (`2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023`; kosong di `2018, 2024, 2025`) | **806,42** (2017) s.d. **2.710,04** (2023) | **1.331,91** (median relatif **9,34%**) | `metode / vintage` |
-| **Informalitas** | `bps_var2153_informal` vs `ilo_0831_informal_total` (`SEX_T + ECO_SECTOR_TOTAL`) | 4 tahun (`2018, 2019, 2022, 2023`; kosong di `2015–2017, 2020–2021, 2024–2025`) | **-25,282** (2018) s.d. **-20,848** (2022) | **-23,146** (median relatif **-28,71%**) | `cakupan / definisi` |
+| **Upah per jam** | `bps_var1172_upah` vs `ilo_0851_upah_total` (`SEX_T + OCU_SKILL_TOTAL`) | 8 tahun (`2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023` pada `selisih_upah`; kosong di `2018, 2024, 2025`) | **806,42** (2017) s.d. **2.710,04** (2023) | **1.331,91** (median relatif **9,34%**) | `metode / vintage` (`kategori_upah`) |
+| **Informalitas** | `bps_var2153_informal` vs `ilo_0831_informal_total` (`SEX_T + ECO_SECTOR_TOTAL`) | 4 tahun (`2018, 2019, 2022, 2023` pada `selisih_informal`; kosong di `2015–2017, 2020–2021, 2024–2025`) | **-25,282** (2018) s.d. **-20,848** (2022) | **-23,146** (median relatif **-28,71%**) | `cakupan / definisi` (`kategori_informal`) |
 
-- **`metode / vintage` (Upah per jam):** Nilai `bps_var1172_upah` lebih tinggi daripada `ilo_0851_upah_total` pada seluruh 8 tahun berpasangan (**806,42** hingga **2.710,04**, atau **5,74%** hingga **16,61%** terhadap ILOSTAT), mencerminkan perbedaan metode pengolahan/sumber serta vintage/transisi seri (`K-003`, `K-009`, dan `log-keputusan.csv`).
-- **`cakupan / definisi` (Informalitas):** Nilai `bps_var2153_informal` (`55,88`–`59,31`) lebih rendah daripada `ilo_0831_informal_total` (`80,158`–`82,262`) pada 4 tahun berpasangan dengan selisih **-25,282** s.d. **-20,848** poin persentase (**-30,73%** s.d. **-26,01%**), mencerminkan perbedaan definisi/kriteria informalitas dan cakupan rincian (`K-004` dan `log-keputusan.csv`).
-- **Periode tanpa pasangan:** Tahun di luar irisan kedua seri tidak memiliki nilai selisih (`selisih_upah` kosong pada `2018`, `2024`, `2025`; `selisih_informal` kosong pada `2015–2017`, `2020–2021`, `2024–2025`) karena salah satu seri tidak tersedia pada tahun tersebut.
+- **`metode / vintage` (Upah per jam — `selisih_upah` & `kategori_upah`):** Nilai `bps_var1172_upah` lebih tinggi daripada `ilo_0851_upah_total` pada seluruh 8 tahun berpasangan (**806,42** hingga **2.710,04**, atau **5,74%** hingga **16,61%** relatif terhadap `ilo_0851_upah_total`), mencerminkan perbedaan metode pengolahan/sumber serta *vintage*/transisi seri (`K-003` baris 4 dan `K-009` baris 10 pada `log-keputusan.csv`).
+- **`cakupan / definisi` (Informalitas — `selisih_informal` & `kategori_informal`):** Nilai `bps_var2153_informal` (`55,88`–`59,31`) lebih rendah daripada `ilo_0831_informal_total` (`80,158`–`82,262`) pada 4 tahun berpasangan dengan selisih **-25,282** s.d. **-20,848** poin persentase (**-30,73%** s.d. **-26,01%** relatif terhadap `ilo_0831_informal_total`), mencerminkan perbedaan definisi/kriteria informalitas dan cakupan rincian (`K-004` baris 5 pada `log-keputusan.csv`).
+- **Periode tanpa pasangan:** Tahun di luar irisan kedua seri dibiarkan kosong pada kolom selisih di `data/gold/tabel_nasional_periode_seri.csv` (`selisih_upah` kosong pada `2018`, `2024`, `2025`; `selisih_informal` kosong pada `2015–2017`, `2020–2021`, `2024–2025`) sesuai aturan `rincian_sebanding_panel` dan `prioritas_jenis_periode` karena salah satu seri tidak tersedia pada tahun tersebut.
 
 ## Validasi dan reproduksibilitas
 Lapisan Silver (`data/silver/silver.parquet`, **1.362 baris**) telah diuji menggunakan pemeriksa skema `python -m src.common.skema data/silver/silver.parquet` dan aturan validasi di `src/validasi/`. Seluruh alur dari data mentah yang terverifikasi `MANIFEST.csv` hingga Silver dapat dijalankan ulang secara deterministik melalui satu perintah `python pipeline.py` (perbandingan performa pandas vs DuckDB/Dask serta pengujian arsip WDI dijadwalkan pada Sprint 2–3).
@@ -54,19 +54,3 @@ Lapisan Silver (`data/silver/silver.parquet`, **1.362 baris**) telah diuji mengg
 | Fitra | 124450102 | Transformasi dan panel | Integrator | Koreksi katalog & struktur panel Silver (`docs/katalog_seri.csv`, integrasi PR ke `main`) |
 | Cerine Sihotang | 124450049 | Integrasi, penyimpanan, dan skala | Reproduksi & Demo | Integrasi dan rekonsiliasi serta uji reproduksibilitas (`DEMO.md`) |
 | Yulia Kristine Malau | 124450119 | Validasi dan dokumentasi | Penjaga Data & Evaluasi | Validasi dan reproduksibilitas (`src/validasi/`, pemeriksaan skema & `MANIFEST.csv`) |
-## Data dan lineage
-
-### Penyimpanan Relasional (Tahap 5) dan Perbandingan dengan Dokumen JSON Mentah
-
-Pada Tahap 5, seluruh keluaran terstruktur (*Silver*, *Panel Gold*, *Pembanding Nasional*, dan *Rekonsiliasi*) dimuat ke dalam basis data relasional **DuckDB** (`data/warehouse.duckdb`) menggunakan skema DDL eksplisit pada `sql/schema.sql`. Setiap tabel dilengkapi kunci primer (*Primary Key*) komposit untuk mencegah duplikasi entitas serta tipe kolom ketat (`DOUBLE`, `INTEGER`, `VARCHAR`, `BOOLEAN`) agar kalkulasi panel dan rekonsiliasi berjalan deterministik.
-
-| Aspek | Dokumen JSON Mentah (NoSQL / Document Store) | Tabel Relasional SQL (DuckDB) |
-| :--- | :--- | :--- |
-| **Struktur & Skema** | *Schema-on-read*; bersarang (*nested*) dan heterogen antara API BPS dan SDMX/DSD ILOSTAT. | *Schema-on-write*; tabular datar dengan tipe data ketat dan *Primary Key*. |
-| **Integritas Data** | Tidak otomatis menolak duplikasi kunci wilayah-tahun atau inkonsistensi tipe nilai numerik. | Menegakkan integritas entitas lewat *Primary Key* dan validasi tipe data sejak dimuat. |
-| **Kinerja Kueri Analitik** | Lambat untuk *join* lintas indikator dan agregasi panel karena harus mem-parsing dokumen penuh. | Sangat cepat untuk kueri analitik (*columnar storage*) dan penggabungan antarseri. |
-| **Keterlacakan (*Lineage*)** | Menyimpan struktur hierarki dan metadata sumber asli apa adanya. | Menjaga keterlacakan melalui kolom eksplisit (`_berkas_raw` dan `_sha256_raw`) yang tertaut ke berkas mentah. |
-
-#### Mengapa Pendekatan Ini Cocok untuk Lapis Tertentu
-1. **Lapis *Raw* (Dokumen JSON & CSV Mentah):** Cocok dipertahankan sebagai *immutable landing zone* karena respons API BPS (`sdg8_upah.json`, `manifest_asal.json`) dan metadata SDMX ILOSTAT (`dataflow.json`, `dsd/*.json`) memiliki struktur hierarkis yang berbeda-beda[cite: 2, 4].
-2. **Lapis *Silver* dan *Gold* (Tabel Relasional DuckDB + Parquet):** Setelah ekstraksi dan pembersihan, data berubah menjadi pengamatan panel kuantitatif (38 provinsi x periode x indikator)[cite: 2, 3]. DuckDB sangat cocok karena menjamin keunikan kunci panel lewat *Primary Key*, berjalan *in-process* tanpa *server* terpisah, membaca berkas `.parquet` secara langsung, serta siap dipakai untuk uji skalabilitas Tahap 7[cite: 3].
